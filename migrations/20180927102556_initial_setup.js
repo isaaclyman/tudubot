@@ -13,7 +13,7 @@ exports.down = function(knex, Promise) {
 function todosTable(knex) {
   return knex.schema.createTable(TODOS_TABLE, t => {
     t.increments('id').primary()
-    t.string('user').unique().notNullable()
+    t.string('userId').unique().notNullable()
     t.json('todo')
     t.timestamps()
   })
