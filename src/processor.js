@@ -3,7 +3,7 @@ const messages = require('./_messages')
 const Item = require('./item')
 
 module.exports = function (knex, T) {
-  const { addItem, completeItem, deleteItem, getItems } = require('./actions')(knex, T, reply)
+  const { addItem, completeItem, deleteItem, getItems } = require('./actions')(knex)
   const { reply } = require('./replier')(T)
   const trim = require('./trimmer')()
   const isValid = require('./validator')(knex, T, reply)

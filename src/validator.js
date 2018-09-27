@@ -25,8 +25,8 @@ module.exports = function (knex, T, reply) {
       return false
     }
 
-    const isRecognized = await knex('todos').where({ userId: tweet.user.id_str }).first('id').then(id => {
-      if (id) {
+    const isRecognized = await knex('todos').where({ userId: tweet.user.id_str }).first('id').then(row => {
+      if (row && row.id) {
         return true
       }
       return false
