@@ -1,9 +1,13 @@
-module.exports = function (T) {
-  return async function reply(tweetId, atHandle, message) {
-    if (!atHandle) {
-      return
-    }
+const constants = require ('./_constants')
 
-    await T.post('statuses/update', { status: `@${atHandle} ${message}`, in_reply_to_status_id: tweetId })
+module.exports = function (T) {
+  return {
+    reply: async function (tweetId, atHandle, message) {
+      if (!atHandle) {
+        return
+      }
+  
+      await T.post('statuses/update', { status: `@${atHandle} ${message}`, in_reply_to_status_id: tweetId })
+    }
   }
 }

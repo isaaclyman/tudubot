@@ -14,7 +14,7 @@ function todosTable(knex) {
   return knex.schema.createTable(TODOS_TABLE, t => {
     t.increments('id').primary()
     t.string('userId').unique().notNullable()
-    t.json('todo')
+    t.json('todos')
     t.timestamps()
   })
 }
