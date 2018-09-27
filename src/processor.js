@@ -1,6 +1,5 @@
 const commands = require('./_commands')
 const messages = require('./_messages')
-const Item = require('./item')
 
 module.exports = function (knex, T) {
   const { addItem, completeItem, deleteItem, getItems } = require('./actions')(knex)

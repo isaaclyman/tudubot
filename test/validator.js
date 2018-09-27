@@ -73,6 +73,29 @@ test('a valid tweet by someone who follows me is validated', async t => {
   t.is(isValid, true)
 })
 
+test('a tweet at someone else that mentions me is validated', async t => {
+  t.plan(1)
+
+  tracker.on('query', query => {
+    query.response({ id: 1 })
+  })
+
+  const validator = require('../src/validator')(db, fakeTwit([]), fakeReply())
+
+  const validTweet = {
+    id_str: '12345',
+    in_reply_to_screen_name: 'testbob',
+    text: '@testbob @_tudubot add go running',
+    user: {
+      id_str: '23456',
+      screen_name: 'testbob'
+    }
+  }
+
+  const isValid = await validator(validTweet)
+  t.is(isValid, true)
+})
+
 test('a tweet intended for someone else is not validated', async t => {
   t.plan(1)
 
@@ -110,6 +133,31 @@ test('a tweet by an unrecognized user who does not follow me is not validated', 
     user: {
       id_str: '23456',
       screen_name: 'testbob'
+    }
+  }
+
+  const isValid = await validator(invalidTweet)
+  t.is(isValid, false)
+})
+
+test('my own tweet is not validated', async t => {
+  t.plan(1)
+
+  tracker.on('query', query => {
+    query.response(null)
+  })
+
+  const validator = require('../src/validator')(db, fakeTwit([{
+    connections: ['not_a_real_connection']
+  }]), fakeReply())
+
+  const invalidTweet = {
+    id_str: '12345',
+    in_reply_to_screen_name: 'testbob',
+    text: 'hey @_tudubot add go running',
+    user: {
+      id_str: '23456',
+      screen_name: '_tudubot'
     }
   }
 

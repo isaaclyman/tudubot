@@ -21,4 +21,5 @@ const consume = require('./src/processor')(knex, T)
 knex.migrate.latest().then(() => {
   const ats = T.stream(constants.FILTERED_STATUSES, { track: [`@${constants.HANDLE}`] })
   ats.on('tweet', tweet => consume(tweet))
+  console.log('Listening for tweets that mention me...')
 })

@@ -10,7 +10,7 @@ module.exports = function (knex, T, reply) {
     }
 
     // Don't respond to the bot's own tweets
-    if (tweet.user.screen_name === `${constants.HANDLE}`) {
+    if (tweet.user.screen_name.toLowerCase() === constants.HANDLE) {
       return false
     }
 
@@ -26,7 +26,7 @@ module.exports = function (knex, T, reply) {
     }
 
     const isRecognized = await knex('todos').where({ userId: tweet.user.id_str }).first('id').then(row => {
-      if (row && row.id) {
+      if (row && row.id >= 0) {
         return true
       }
       return false
@@ -36,7 +36,7 @@ module.exports = function (knex, T, reply) {
       return true
     }
 
-    const followsMe = await T.get(constants.FRIENDSHIPS_LOOKUP, { user_id: tweet.user.id_str }).then(users => {
+    const followsMe = await T.get(constants.FRIENDSHIPS_LOOKUP, { user_id: tweet.user.id_str }).then(({ data: users }) => {
       if (!users || !users.length) {
         return false
       }

@@ -12,7 +12,8 @@ module.exports = function (knex) {
         return
       }
 
-      const todos = await this.getItems(userId)
+      const userExists = await knex('todos').where({ userId }).first('id').then(row => row && row.id >= 0)
+      const todos = userExists ? await this.getItems(userId) : []
 
       if (todos.length >= constants.MAX_TODO_NUMBER) {
         await onMessage(messages.TOO_MANY_ITEMS)
@@ -20,12 +21,20 @@ module.exports = function (knex) {
       }
 
       todos.push({ content: text, complete: false })
-      await knex('todos').insert({
-        userId,
-        todos,
-        created_at: knex.raw('current_timestamp'),
-        updated_at: knex.raw('current_timestamp')
-      })
+
+      if (userExists) {
+        await knex('todos').where({ userId }).update({
+          todos,
+          updated_at: knex.raw('current_timestamp')
+        })
+      } else {
+        await knex('todos').insert({
+          userId,
+          todos,
+          created_at: knex.raw('current_timestamp'),
+          updated_at: knex.raw('current_timestamp')
+        })
+      }
     },
     completeItem: async function (text, userId, onMessage) {
       const todos = await this.getItems(userId)
@@ -83,7 +92,7 @@ module.exports = function (knex) {
       return -1
     },
     getItems: async function (userId) {
-      let todos = await knex('todos').where({ userId }).first('todos').then(({ todos: dbTodos } = {}) => dbTodos)
+      let todos = await knex('todos').where({ userId }).first('todos').then(row => row && row.todos)
       if (!todos) {
         todos = []
       }
