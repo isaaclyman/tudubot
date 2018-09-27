@@ -26,6 +26,8 @@ test.after('unmock db', () => {
 })
 
 test('a valid tweet object by a recognized user is validated', async t => {
+  t.plan(1)
+
   tracker.on('query', query => {
     query.response({ id: 1 })
   })
@@ -47,6 +49,8 @@ test('a valid tweet object by a recognized user is validated', async t => {
 })
 
 test('a valid tweet by someone who follows me is validated', async t => {
+  t.plan(1)
+
   tracker.on('query', query => {
     query.response(null)
   })
@@ -70,6 +74,8 @@ test('a valid tweet by someone who follows me is validated', async t => {
 })
 
 test('a tweet intended for someone else is not validated', async t => {
+  t.plan(1)
+
   const validator = require('../src/validator')(db, fakeTwit([]), fakeReply())
 
   const invalidTweet = {
@@ -87,6 +93,8 @@ test('a tweet intended for someone else is not validated', async t => {
 })
 
 test('a tweet by an unrecognized user who does not follow me is not validated', async t => {
+  t.plan(1)
+
   tracker.on('query', query => {
     query.response(null)
   })
