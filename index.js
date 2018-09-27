@@ -2,12 +2,12 @@
 const path = require('path')
 const Twit = require('twit')
 
-const knex = require('./db')
-
 if (!process.env.DATABASE_URL) {
   var env = require('node-env-file')
   env(path.join(__dirname, '.env'))
 }
+
+const knex = require('./db')
 
 knex.migrate.latest().then(() => {
   const T = new Twit({
