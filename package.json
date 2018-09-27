@@ -1,0 +1,26 @@
+{
+  "name": "tudubot",
+  "version": "1.0.0",
+  "description": "A public to-do list you create by tweeting @_tudubot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaaclyman/tudubot.git"
+  },
+  "author": "Isaac Lyman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isaaclyman/tudubot/issues"
+  },
+  "homepage": "https://github.com/isaaclyman/tudubot#readme",
+  "dependencies": {
+    "knex": "^0.15.2",
+    "node-env-file": "^0.1.8",
+    "pg": "^7.4.3",
+    "twit": "^2.2.11"
+  }
+}
