@@ -16,6 +16,9 @@
   "bugs": {
     "url": "https://github.com/isaaclyman/tudubot/issues"
   },
+  "engines": {
+    "node": "8.11.4"
+  },
   "homepage": "https://github.com/isaaclyman/tudubot#readme",
   "dependencies": {
     "knex": "^0.15.2",
