@@ -45,18 +45,27 @@ module.exports = function (knex, T) {
       return
     }
 
-    let items = []
+    let items = [], succeeded
     switch (command) {
       case 'ADD':
-        await addItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        succeeded = await addItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        if (!succeeded) {
+          return
+        }
         items = await getItems(userId)
         break
       case 'COMPLETE':
-        await completeItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        succeeded = await completeItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        if (!succeeded) {
+          return
+        }
         items = await getItems(userId)
         break
       case 'DELETE':
-        await deleteItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        succeeded = await deleteItem(text, userId, msg => reply(tweetId, atHandle, msg))
+        if (!succeeded) {
+          return
+        }
         items = await getItems(userId)
         break
       case 'HELP':
@@ -68,8 +77,10 @@ module.exports = function (knex, T) {
     }
 
     const prefix = `@${atHandle}\n`
-    await reply(tweetId, atHandle, prefix + items.map(item => {
+    const list = items && items.length ? items.map(item => {
       return `${item.complete ? '☑️' : '⬜'} ${item.content}`
-    }).join('\n'))
+    }).join('\n') : 'List is empty.'
+
+    await reply(tweetId, atHandle, prefix + list)
   }
 }

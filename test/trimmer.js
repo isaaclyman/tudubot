@@ -20,6 +20,10 @@ const strings = [
   {
     initial: `@dad check this out @${constants.HANDLE} add get @mom a present`,
     expected: 'add get @mom a present'
+  },
+  {
+    initial: `@_tudubot @_tudubot check off running`,
+    expected: `check off running`
   }
 ]
 
